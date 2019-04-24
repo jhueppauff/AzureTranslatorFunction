@@ -235,6 +235,9 @@
         "type": "SystemAssigned"
       },
       "properties": {
+        "RepoUrl": "https://github.com/jhueppauff/AzureTranslatorFunction.git",
+        "branch": "master",
+        "IsManualIntegration": true,
         "siteConfig": {
           "appSettings": [
             {
@@ -264,6 +267,14 @@
             {
               "name": "WEBSITE_TIME_ZONE",
               "value": "[parameters('timezone')]"
+            },
+            {
+              "name": "TranslatorApiKey",
+              "value": "[listKeys(parameters('cognitiveServiceName'),'2016-02-01-preview').key1]"
+            },
+            {
+              "name": "TranslatorApiUrl",
+              "value": "https://api-eur.cognitive.microsofttranslator.com"
             }
           ]
         },
@@ -272,21 +283,6 @@
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', variables('hostingPlanName'))]"
       },
       "resources": [
-        {
-          "name": "appsettings",
-          "type": "config",
-          "apiVersion": "2015-08-01",
-          "dependsOn": [
-            "[resourceId('Microsoft.Web/sites', parameters('functionAppName'))]"
-          ],
-          "tags": {
-            "displayName": "AppSettings"
-          },
-          "properties": {
-            "TranslatorApiKey": "[listKeys(parameters('cognitiveServiceName'),'2016-02-01-preview').key1]",
-            "TranslatorApiUrl": "https://api-eur.cognitive.microsofttranslator.com"
-          }
-        }
       ]
     },
     {
