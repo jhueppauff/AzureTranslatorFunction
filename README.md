@@ -4,7 +4,7 @@ Azure Function consuming Azure Cognitive Services (Translator) for translating s
 
 ## Deploy 
 
-[![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://azuredeploy.net/)
+
 
 ## Sample Request
 
