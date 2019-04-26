@@ -26,7 +26,7 @@ namespace Translator
             string incommingRequestBody = await new StreamReader(req.Body).ReadToEndAsync();
             Input data = JsonConvert.DeserializeObject<Input>(incommingRequestBody);
 
-            if (data.OutputLanguage == string.Empty ||  data.OutputLanguage == null)
+            if (data.OutputLanguage == string.Empty || data.OutputLanguage == null)
             {
                 return new BadRequestObjectResult("Missing Output Language.");
             }
@@ -52,7 +52,7 @@ namespace Translator
                 request.Method = HttpMethod.Post;
 
                 // Construct the full URI
-                request.RequestUri = new Uri(configuration.GetValue<string>("TranslatorApiUrl") + $"/translate?api-version=3.0&to={data.OutputLanguage}");
+                request.RequestUri = new Uri($"{configuration.GetValue<string>("TranslatorApiUrl")}/translate?api-version=3.0&to={data.OutputLanguage}");
 
                 // Add the serialized JSON object to your request
                 request.Content = new StringContent(requestBody, Encoding.UTF8, "application/json");
@@ -64,15 +64,14 @@ namespace Translator
                 var response = client.SendAsync(request).Result;
                 var jsonResponse = response.Content.ReadAsStringAsync().Result;
 
+                // Convert to a easier output
                 RootObject[] objectResponse = JsonConvert.DeserializeObject<RootObject[]>(jsonResponse);
-
                 Output output = new Output()
                 {
                     Content = objectResponse[0].translations[0].text,
                     InputLanguage = objectResponse[0].detectedLanguage.language,
                     Score = objectResponse[0].detectedLanguage.score
                 };
-
 
                 return jsonResponse != null
                 ? (ActionResult)new OkObjectResult(output)
